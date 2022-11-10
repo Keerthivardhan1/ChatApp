@@ -40,21 +40,21 @@ public class Client {
         Runnable r1=()->{
 
             System.out.println("reader started");
+            try {
 
-            while (true) {
-                String msg;
-                try {
-                    msg = br.readLine();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                while (true) {
+                  String  msg = br.readLine();
+                    if (msg.equals("exit")) {
+                        System.out.println("Server terminated the chat");
+                        socket.close();
+                        break;
+                    }
+
+                    System.out.println(" server :- " + msg);
                 }
 
-                if (msg.equals("exit")) {
-                    System.out.println("server terminated the chat");
-                    break;
-                }
-
-                System.out.println(" server :- "+msg);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
         };
@@ -66,21 +66,22 @@ public class Client {
         System.out.println("writer is started");
 
         Runnable r2=()->{
-
-            while (true) {
-
-                try {
-
+            try {
+                while (true) {
                     BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
                     String content = br1.readLine();
+                    if(content.equals("exit")){
+                        socket.close();
+                        break;
+                    }
                     out.println(content);
                     out.flush();
 
-                } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
                 }
 
+            } catch (Exception e) {
+                System.out.println(e);
+                e.printStackTrace();
             }
 
         };

@@ -56,25 +56,23 @@ public class Server {
         // this thread read the data
 
         Runnable r1=()->{
-
             System.out.println("reader started");
+            try {
 
-            while (true) {
-                String msg;
-                try {
-                    msg = br.readLine();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                while (true) {
+
+                   String msg = br.readLine();
+                    if (msg.equals("exit")) {
+                        System.out.println("Clint terminated the chat");
+                        socket.close();
+                        break;
+                    }
+                    System.out.println(" Client :- " + msg);
                 }
 
-                if (msg.equals("exit")) {
-                    System.out.println("Clint terminated the chat");
-                    break;
-                }
-
-                System.out.println(" Client :- "+msg);
+            }catch (IOException e) {
+                throw new RuntimeException(e);
             }
-
         };
         new Thread(r1).start();
     }
@@ -84,29 +82,24 @@ public class Server {
         System.out.println("writer is started");
 
         Runnable r2=()->{
-
+            try {
             while (true) {
-
-                try {
-
                     BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
                     String content = br1.readLine();
+                    if(content.equals("exit")){
+                        socket.close();
+                        break;
+                    }
                     out.println(content);
                     out.flush();
-
-                } catch (Exception e) {
-                    System.out.println(e);
-                    e.printStackTrace();
                 }
+            } catch (Exception e) {
+                System.out.println(e);
+                e.printStackTrace();
             }
-
         };
-
         new Thread(r2).start();
-
     }
-
-
     public static void main(String[] args) throws IOException {
 
         System.out.println("Server is created");
