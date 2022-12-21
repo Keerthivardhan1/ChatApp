@@ -96,11 +96,12 @@ public class Client extends JFrame{
         heading.setHorizontalAlignment(SwingConstants.CENTER);
         heading.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         messageInput.setHorizontalAlignment(SwingConstants.CENTER);
-
+        messageArea.setEditable(false);
         this.setLayout(new BorderLayout());
 
         this.add(heading,BorderLayout.NORTH);
-        this.add(messageArea,BorderLayout.CENTER);
+        JScrollPane jScrollPane = new JScrollPane(messageArea);
+        this.add(jScrollPane,BorderLayout.CENTER);
         this.add(messageInput,BorderLayout.SOUTH);
     }
 
